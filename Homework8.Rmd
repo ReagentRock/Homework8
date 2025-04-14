@@ -1,0 +1,73 @@
+---
+title: "Homework 8"
+author: "Elijah Wang"
+date: "2025-04-11"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(mosaic)
+
+creatine<-read.csv("creatinine.csv")
+covid<-read.csv("covid.csv")
+milk<-read.csv("milk.csv")
+
+```
+
+## Problem 1: regression warm up
+
+
+```{r,include=FALSE}
+creatineModel<-lm(creatclear~age,data=creatine)
+```
+
+A) For a 55-year old, we would expect a clearance rate of 113.724ml/minute. We determined this by creating a linear regression of creatinine clearance rate to age to get the rate by following equation:
+y=147.8129-0.6198x
+when x=55 then y equals 113.7239.
+
+B)
+Creatinine clearance rate decreases at a rate of -0.6198ml/minute per year. I found this number by fitting a linear regression of the creatinine clearance rate and age whereas the slope(or beta1) is that value. 
+
+
+C)
+a 40 year old averages a creatinine clearance rate of(y=147.8129-0.6198(40)) 123.0209
+The 60 year old, however, averages a creatinine clearance rate of (y=147.8129-0.6198(60)) 110.6249.
+Looking at the residuals the 40 yr differed by 11.971(135-123.029)
+while the 60 yr differed by 1.3751(112-110.6249)
+As such, the 40 year old is healthier due to having a higher creatinine clearance rate relative to their age compared to that 60 year old.
+
+## Problem 2: Modelling disease growth
+
+```{r pressure, echo=FALSE,include=FALSE}
+covidModelI<-lm(log(deaths[country=="Italy"])~days_since_first_death[country=="Italy"],data=covid)
+covidModelS<-lm(lm(log(deaths[country=="Spain"])~days_since_first_death[country=="Spain"],data=covid))
+
+covidModelI_B<-do(10000)*lm(log(deaths[country=="Italy"])~days_since_first_death[country=="Italy"],data=resample(covid))
+confint(covidModelI_B)
+
+covidModelS_B<-do(10000)*lm(lm(log(deaths[country=="Spain"])~days_since_first_death[country=="Spain"],data=resample(covid)))
+
+confint(covidModelI_B)
+confint(covidModelS_B)
+```
+1. Italy has an estimated growth rate with a 95% confidence interval of %15.907 to %20.784 . As such, the doubling time is 3.4 to 4.4 days.
+
+2. Spain has an estimated growth rate of 23.344% to 31.828%. As such, the doubling time is 2.2 to 3.0 days.
+
+3. The line plot:
+```{r}
+ggplot(covid)+geom_line(aes(x=days_since_first_death,y=deaths,colour = country))+xlab("Time(days)")+ylab("Reported COVID Deaths(people)")+ggtitle("Reported COVID Deaths Over Time")
+
+```
+
+## Problem 3: Price elasticity and demand
+
+```{r,include=FALSE}
+milkModel<-lm(log(sales)~log(price),data=milk)
+
+milkModel_B<-do(10000)*lm(log(sales)~log(price),data=resample(milk))
+confint(milkModel_B)
+```
+The estimate 95% confidence interval for price elasticity for milk is -1.772 to -1.450. I obtained this value by creating a power model using the lm function on the log of the two variables respectively. I then simulated this model 100,000 times and took the confidence interval of that bootstrapped model.
