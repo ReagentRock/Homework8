@@ -4,6 +4,7 @@ author: "Elijah Wang"
 date: "2025-04-11"
 output: pdf_document
 ---
+github link: https://github.com/ReagentRock/Homework8.git
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -28,7 +29,7 @@ y=147.8129-0.6198x
 when x=55 then y equals 113.7239.
 
 B)
-Creatinine clearance rate decreases at a rate of -0.6198ml/minute per year. I found this number by fitting a linear regression of the creatinine clearance rate and age whereas the slope(or beta1) is that value. 
+Creatinine clearance rate decreases at a rate of -0.6198ml/minute per year. I found this number by fitting a linear regression of the creatinine clearance rate and age whereas the slope(or beta1) is that creatinine clearance rate per year. 
 
 
 C)
@@ -52,9 +53,9 @@ covidModelS_B<-do(10000)*lm(lm(log(deaths[country=="Spain"])~days_since_first_de
 confint(covidModelI_B)
 confint(covidModelS_B)
 ```
-1. Italy has an estimated growth rate with a 95% confidence interval of %15.907 to %20.784 . As such, the doubling time is 3.4 to 4.4 days.
+1. Italy has an estimated growth rate of 18.346% with a 95% confidence interval of %15.907 to %20.784 . As such, the doubling time has a 95% confidence interval of 3.4 to 4.4 days and an estimate of 3.9 days.
 
-2. Spain has an estimated growth rate of 23.344% to 31.828%. As such, the doubling time is 2.2 to 3.0 days.
+2. Spain has an estimated growth rate of 27.586% with a 95% confidence interval of 23.344% to 31.828%. As such, the doubling time has a 95% confidence interval of 2.2 to 3.0 days and an estimate of 2.6 days.
 
 3. The line plot:
 ```{r}
@@ -70,4 +71,4 @@ milkModel<-lm(log(sales)~log(price),data=milk)
 milkModel_B<-do(10000)*lm(log(sales)~log(price),data=resample(milk))
 confint(milkModel_B)
 ```
-The estimate 95% confidence interval for price elasticity for milk is -1.772 to -1.450. I obtained this value by creating a power model using the lm function on the log of the two variables respectively. I then simulated this model 100,000 times and took the confidence interval of that bootstrapped model.
+The estimate 95% confidence interval for price elasticity for milk is -1.772 to -1.450. By this interval we can estimate the price elasticity is -1.619. I obtained this value by creating a power model using the lm function on the log of the two variables respectively. I then simulated this model 100,000 times and took the confidence interval of that bootstrapped model.
